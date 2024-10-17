@@ -14,38 +14,35 @@ class FileManager:
 
     def getLastId(self):
         if not os.path.exists(self.filename):
-            return 1
-        last_line = None
-        with open(self.filename, 'rb') as file:
-            file.seek(0, 2)
-            fileSize = file.tell()
+            return 0
+        last_line = ''
+        try:
+            with open(self.filename, 'r', encoding='utf-8') as file:
+                file.seek(0, 2)
+                fileSize = file.tell()
 
-            if fileSize == 0:
-                return 1
-            for i in range(fileSize -1, fileSize - 4, -1):
-                file.seek(i)
-                character = file.read(1)
-
-                if character == b'\n' and i != fileSize-1:
-                    last_line = file.readline().decode().strip()
-            else:
-                file.seek(0)
-                last_line = file.readline().decode().strip()
-            last_object = json.loads(last_line)
-            return last_object.get(id, 1)
-        return 1
+                if fileSize == 0:
+                    return 0
+                for line in file:
+                    pass
+                last_line = line.strip()
+                last_object = json.loads(last_line)
+                return last_object.get("id", 0)
+        except Exception as err:
+                print(f"Failed to parse, {err}")
 
     def addToFile(self, data):
-        lastId = self.getLastId
+        lastId = self.getLastId()
+        print(lastId)
         inputted_data = {"id": lastId + 1,
                 "description": data,
                 "status": "toDo",
-                "createdAt": datetime.now(timezone.utc),
+                "createdAt": datetime.now(timezone.utc).isoformat(),
                 "updatedAt": None
             }
         with open(self.filename, 'a') as file:
-            json.loads(inputted_data)
-            file.write('\n')
+            json_str = json.dumps(inputted_data)
+            file.write(json_str + '\n')
         
 record = FileManager('record.jsonl')
 
@@ -53,9 +50,10 @@ record = FileManager('record.jsonl')
 while not finished:
     input_command = input()
     splitted_input = input_command.split() 
+    task = ' '.join(splitted_input[1:])
     
     if splitted_input[0] == "add":
-        record.addToFile()
+        record.addToFile(task)
     
     finished = True
 
