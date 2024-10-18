@@ -15,21 +15,22 @@ class FileManager:
     def getLastId(self):
         if not os.path.exists(self.filename):
             return 0
-        last_line = ''
-        try:
-            with open(self.filename, 'r', encoding='utf-8') as file:
-                file.seek(0, 2)
-                fileSize = file.tell()
+        line = ''
+        # try:
+        with open(self.filename, 'r', encoding='utf-8') as file:
+            fileSize = os.path.getsize(self.filename)
 
-                if fileSize == 0:
-                    return 0
-                for line in file:
-                    pass
-                last_line = line.strip()
-                last_object = json.loads(last_line)
-                return last_object.get("id", 0)
-        except Exception as err:
-                print(f"Failed to parse, {err}")
+            if fileSize == 0:
+                return 0
+            for line in file:
+                pass
+            last_line = line.strip()
+            last_object = json.loads(last_line)
+            # print(last_object)
+            # print(last_object.get("id", 0))
+            return last_object.get("id", 0)
+        # except Exception as err:
+        #         print(f"Failed to parse, {err}")
 
     def addToFile(self, data):
         lastId = self.getLastId()
@@ -40,10 +41,13 @@ class FileManager:
                 "createdAt": datetime.now(timezone.utc).isoformat(),
                 "updatedAt": None
             }
+        # try:
         with open(self.filename, 'a') as file:
             json_str = json.dumps(inputted_data)
             file.write(json_str + '\n')
-        
+        # except Exception as e:
+        #     print(f"Failed to append to file, {e}")
+
 record = FileManager('record.jsonl')
 
 
@@ -55,7 +59,7 @@ while not finished:
     if splitted_input[0] == "add":
         record.addToFile(task)
     
-    finished = True
+    
 
 
 
