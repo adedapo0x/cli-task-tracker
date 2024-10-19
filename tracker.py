@@ -15,11 +15,17 @@ while not finished:
     splitted_input = input_command.split() 
     task = ' '.join(splitted_input[1:])
     
-    if splitted_input[0] == "add":
+    if splitted_input[0].lower() == "add":
         record.addToFile(task)
 
-    elif splitted_input[0] == "end":
+    elif splitted_input[0].lower() == "update":
+        ...
+
+    elif splitted_input[0].lower() == "end":
         finished = True
+
+    else:
+        print("L")
     
     
 
