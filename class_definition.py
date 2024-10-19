@@ -12,7 +12,7 @@ class FileManager:
         line = ''
         try:
             with open(self.filename, 'r', encoding='utf-8') as file:
-                fileSize = os.path.getsize(self.filename)
+                fileSize = os.path.getsize(file)
 
                 if fileSize == 0:
                     return 0
@@ -42,4 +42,19 @@ class FileManager:
         except Exception as e:
             print(f"Failed to append to file, {e}")
     
-    
+    def updateTask(self, id):
+        with open(self.filename, 'a') as file:
+            if not os.path.exists(file):
+                print("No task available in tracker!")
+                return
+            file_list = file.readlines()
+            l = 0
+            r = len(file_list)
+            count = r // 2
+            while l <= r:
+                if file_list[l] > file_list[count]:
+
+
+
+
+
