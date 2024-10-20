@@ -41,12 +41,8 @@ class FileManager:
         except Exception as e:
             print(f"Failed to append to file, {e}")
     
-    def updateTask(self, inputID, update):
-        task = ""
-        if not os.path.exists(self.filename):
-                print("No task available in tracker!")
-                return
-        # reads file into memory
+    def findTask(self, inputID):
+         # reads file into memory
         with open(self.filename, 'r') as file:
             file_list = file.readlines()
 
@@ -72,6 +68,19 @@ class FileManager:
             print("Task ID not in tracker!")
             print("To view tasks and their IDs, enter 'list'")
             return
+        else:
+            return task_index
+
+
+    def updateTask(self, inputID, update):
+        if not os.path.exists(self.filename):
+                print("No task available in tracker!")
+                return
+        
+        with open(self.filename, 'r') as file:
+            file_list = file.readlines()
+
+        task_index = self.findTask(inputID)
 
         # updates particular task description 
         task = json.loads(file_list[task_index])
@@ -84,6 +93,27 @@ class FileManager:
             file.writelines(file_list)
 
         print(f"Task updated successfully! (ID: {inputID})")
+
+    def deleteTask(self, inputID):
+        with open(self.filename, 'r') as file:
+            file_list = file.readlines()
+
+        if inputID < 1 or inputID >= len(file):
+            print("Task ID not in tracker!")
+            print("To view tasks and their IDs, enter 'list'")
+            return
+        
+        task_index = self.findTask(inputID)
+        task = json.loads(file_list[task_index])
+
+        
+
+        del task
+
+
+
+
+
                     
         
             
