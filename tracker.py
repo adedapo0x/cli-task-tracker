@@ -1,6 +1,3 @@
-import json
-import os
-from datetime import datetime, timezone
 from class_definition import FileManager
 
 print("Welcome to Task-Tracker!!")
@@ -13,13 +10,22 @@ record = FileManager('record.jsonl')
 while not finished:
     input_command = input()
     splitted_input = input_command.split() 
-    task = ' '.join(splitted_input[1:])
     
     if splitted_input[0].lower() == "add":
-        record.addToFile(task)
+        task = ' '.join(splitted_input[1:])
+        if len(task) < 3:
+            print("Please include task, description must have more than two characters")
+        else:
+            record.addToFile(task)
 
     elif splitted_input[0].lower() == "update":
-        ...
+        task = " ".join(splitted_input[2:])
+        if len(task) >= 3 and splitted_input[1].isdigit():
+            record.updateTask(splitted_input[1], task)
+        else:
+            print("Please include task, description length must be more than two")
+            print("ID must be a digit corresponding to a task ID")
+            print("To view tasks and their IDs, enter 'list'")
 
     elif splitted_input[0].lower() == "end":
         finished = True

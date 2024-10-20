@@ -46,40 +46,44 @@ class FileManager:
         if not os.path.exists(self.filename):
                 print("No task available in tracker!")
                 return
-        with open(self.filename, 'r+') as file:
+        # reads file into memory
+        with open(self.filename, 'r') as file:
             file_list = file.readlines()
-            l = 0
-            r = len(file_list) - 1
-            task_index = -1
-            while l <= r:
-                mid = (r + l) // 2
-                try:
-                    midVal = json.loads(file_list[mid])
-                    if midVal["id"] > inputID:
-                        r = mid - 1
-                    elif midVal["id"] < inputID:
-                        l = mid + 1
-                    elif midVal["id"] == inputID:
-                        task = json.loads(file_list[mid])
-                    else: 
-                        task_index = mid
-                        break
-                except Exception as e:
-                    print(f"Error decoding JSON at line {mid + 1}")
-                    return
-                if task_index == -1:
-                    print("Task ID not in tracker!")
-                    return 
-                task = json.loads(file_list[task_index])
-                task["description"] = update 
 
-                # prepare data to write back to file
-                file_list[task_index] = json.dumps(task) + '\n'
+        l = 0
+        r = len(file_list) - 1
+        task_index = -1
+        while l <= r:
+            mid = (r + l) // 2
+            try:
+                midVal = json.loads(file_list[mid])
+                if midVal["id"] > int(inputID):
+                    r = mid - 1
+                elif midVal["id"] < int(inputID):
+                    l = mid + 1
+                else: 
+                    task_index = mid
+                    break
+            except Exception as e:
+                print(f"Error decoding JSON at line {mid + 1}")
+                print(e)
+                return
+        if task_index == -1:
+            print("Task ID not in tracker!")
+            print("To view tasks and their IDs, enter 'list'")
+            return
 
-                with open(self.filename, 'w') as file:
-                    file.writelines(file_list)
-                    
-            print(f"Task updated successfully! (ID: {inputID})")
+        # updates particular task description 
+        task = json.loads(file_list[task_index])
+        task["description"] = update 
+
+        # prepare data to write back to file
+        file_list[task_index] = json.dumps(task) + '\n'
+
+        with open(self.filename, 'w') as file:
+            file.writelines(file_list)
+
+        print(f"Task updated successfully! (ID: {inputID})")
                     
         
             
