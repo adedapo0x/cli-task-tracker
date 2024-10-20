@@ -80,7 +80,7 @@ class FileManager:
         with open(self.filename, 'r') as file:
             file_list = file.readlines()
 
-        task_index = self.findTask(inputID)
+        task_index = file_list[int(inputID) + 1]
 
         # updates particular task description 
         task = json.loads(file_list[task_index])
