@@ -27,6 +27,13 @@ while not finished:
             print("ID must be a digit corresponding to a task ID")
             print("To view tasks and their IDs, enter 'list'")
 
+    elif splitted_input[0].lower() == "delete":
+        if not splitted_input[1].isdigit():
+            print("Enter valid task ID! Enter 'list' to see list of tasks")
+        else:
+            record.deleteTask(splitted_input[1])
+        
+
     elif splitted_input[0].lower() == "end":
         finished = True
 
