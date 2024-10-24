@@ -1,5 +1,5 @@
 import json, os
-from datetime import datetime, timezone
+from datetime import datetime
 
 class FileManager:
     def __init__(self, filename):
@@ -9,48 +9,23 @@ class FileManager:
     def getLastId(self):
         if not os.path.exists(self.filename):
             return 0
-        line = ''
         try:
-            with open(self.filename, 'rb') as file:
-                file.seek(0, os.SEEK_END)
-                fileSize = file.tell()
-                
-                if fileSize == 0:
-                    return 0
-                
-                # Move the cursor to the beginning of the last line
-                file.seek(-1, os.SEEK_END)
-                while file.read(1) != b'\n':
-                    file.seek(-2, os.SEEK_CUR)
-                    if file.tell() == 0:
-                        break
-                
-                last_line = file.readline().decode('utf-8').strip()
-                print(last_line)
+            with open(self.filename, 'r', encoding='utf-8') as file:
+                fileSize = os.path.getsize(self.filename)
+                if fileSize == 0: # if file is empty
+                    return 0 
+                last_line = [line.strip() for line in file if line.strip()][-1]
                 last_object = json.loads(last_line)
                 return last_object.get("id", 0)
-        except (IOError, json.JSONDecodeError) as err:
-            print(f"Failed to parse: {err}")
-            return 0
-        #     with open(self.filename, 'r', encoding='utf-8') as file:
-        #         fileSize = os.path.getsize(self.filename)
-
-        #         if fileSize == 0:
-        #             return 0
-        #         for line in file:
-        #             pass
-        #         last_line = line.strip()
-        #         last_object = json.loads(last_line)
-        #         return last_object.get("id", 0)
-        # except Exception as err:
-        #         print(f"Failed to parse, {err}")
+        except Exception as err:
+                print(f"Failed to parse, {err}")
 
     def addToFile(self, data):
         lastId = self.getLastId()
         inputted_data = {"id": lastId + 1,
                 "description": data,
                 "status": "toDo",
-                "createdAt": datetime.now(timezone.utc).isoformat(),
+                "createdAt": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "updatedAt": None
             }
         
@@ -75,7 +50,8 @@ class FileManager:
 
         # updates particular task description 
         task = json.loads(task_json)
-        task["description"] = update 
+        task["description"] = update
+        task["updatedAt"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # prepare data to write back to file
         file_list[int(inputID) - 1] = json.dumps(task) + '\n'
@@ -100,7 +76,7 @@ class FileManager:
             print("To view tasks and their IDs, enter 'list'")
             return
         
-        data = [obj for obj in data if int(obj["id"]) != inputID]
+        data = [obj for obj in data if obj["id"] != int(inputID)]
 
         for i, obj in enumerate(data,start=1):
             obj["id"] = i
@@ -109,8 +85,6 @@ class FileManager:
             for obj in data:
                 json_str = json.dumps(obj)
                 file.write(json_str + '\n')
-            
-            file.write('\n')
 
         print("Delete operation successful")
 
