@@ -37,13 +37,13 @@ while not finished:
         if not splitted_input[1].isdigit():
             print("Enter valid task ID! Enter 'list' to see list of tasks")
         else:
-            record.updateProgress(splitted_input[1], "inProgress")
+            record.updateProgress(splitted_input[1], "in-progress")
 
     elif splitted_input[0].lower() == "mark-to-do":
         if not splitted_input[1].isdigit():
             print("Enter valid task ID! Enter 'list' to see list of tasks")
         else:
-            record.updateProgress(splitted_input[1], "toDo")
+            record.updateProgress(splitted_input[1], "todo")
     
     elif splitted_input[0].lower() == "mark-done":
         if not splitted_input[1].isdigit():
@@ -51,8 +51,17 @@ while not finished:
         else:
             record.updateProgress(splitted_input[1], "done")
 
-    elif splitted_input[0].lower() == "list":
+    elif splitted_input[0].lower() == "list" and len(splitted_input) == 1:
         record.listAllTask()
+
+    elif splitted_input[0].lower() == "list" and splitted_input[1].lower() == "done":
+       record.listProgress("done")
+
+    elif splitted_input[0].lower() == "list" and splitted_input[1].lower() == "todo":
+       record.listProgress("todo")
+
+    elif splitted_input[0].lower() == "list" and splitted_input[1].lower() == "in-progress":
+       record.listProgress("in-progress")
 
     elif splitted_input[0].lower() == "end":
         finished = True
