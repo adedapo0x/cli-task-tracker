@@ -1,4 +1,4 @@
-{"id": 1, "description": "test3", "status": "toDo", "createdAt": "2024-10-24 10:26:51", "updatedAt": null}
+{"id": 1, "description": "test3", "status": "inProgress", "createdAt": "2024-10-24 10:26:51", "updatedAt": null}
 {"id": 2, "description": "fetching water", "status": "inProgress", "createdAt": "2024-10-24 10:38:55", "updatedAt": "2024-10-24 11:18:21"}
 {"id": 3, "description": "amaka cutting grass", "status": "toDo", "createdAt": "2024-10-24 11:17:47", "updatedAt": null}
 {"id": 4, "description": "testing the states", "status": "toDo", "createdAt": "2024-10-24 11:49:34", "updatedAt": null}

@@ -51,6 +51,9 @@ while not finished:
         else:
             record.updateProgress(splitted_input[1], "done")
 
+    elif splitted_input[0].lower() == "list":
+        record.listAllTask()
+
     elif splitted_input[0].lower() == "end":
         finished = True
 
