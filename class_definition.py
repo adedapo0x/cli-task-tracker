@@ -24,7 +24,7 @@ class FileManager:
         lastId = self.getLastId()
         inputted_data = {"id": lastId + 1,
                 "description": data,
-                "status": "toDo",
+                "status": "todo",
                 "createdAt": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "updatedAt": None
             }
@@ -153,7 +153,24 @@ class FileManager:
             print(f'{line["id"]} - {line["description"]} - {line["status"]} - {line["createdAt"]} - {line["updatedAt"]}')
     
 
-    
+    def listProgress(self, progress):
+        if not os.path.exists(self.filename):
+            print("No task available in tracker!")
+            return
+        data = []
+        try:
+            with open(self.filename, "r") as file:
+                for line in file:
+                    data.append(json.loads(line.strip()))
+        except Exception as e:
+            print(f"Problem getting tracker data, error: {e}")
+
+        print("Task ID -- Task -- Status -- Created At -- Updated At")
+
+        for line in data:
+            if line["status"] == progress:
+                print(f'{line["id"]} - {line["description"]} - {line["status"]} - {line["createdAt"]} - {line["updatedAt"]}')
+
 
 
 
