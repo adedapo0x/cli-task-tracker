@@ -72,14 +72,3 @@ while not finished:
     else:
         print("Invalid command!")
         print("Enter the help keyword to see valid commands syntax")
-
-    
-    
-
-
-
-
-
-
-
-
