@@ -42,9 +42,14 @@ class FileManager:
         if not os.path.exists(self.filename):
                 print("No task available in tracker!")
                 return
-        
+
         with open(self.filename, 'r') as file:
             file_list = file.readlines()
+
+            if int(inputID) < 1 or int(inputID) > len(file_list):
+                print("Task ID not in tracker!")
+                print("To view tasks and their IDs, enter 'list'")
+                return
 
         task_json = file_list[int(inputID) - 1]
 
