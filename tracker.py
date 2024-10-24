@@ -63,11 +63,16 @@ while not finished:
     elif splitted_input[0].lower() == "list" and splitted_input[1].lower() == "in-progress":
        record.listProgress("in-progress")
 
+    elif splitted_input[0].lower() == "help":
+        record.help()
+
     elif splitted_input[0].lower() == "end":
         finished = True
 
     else:
-        print("L")
+        print("Invalid command!")
+        print("Enter the help keyword to see valid commands syntax")
+
     
     
 
