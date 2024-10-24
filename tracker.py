@@ -33,6 +33,23 @@ while not finished:
         else:
             record.deleteTask(splitted_input[1])
         
+    elif splitted_input[0].lower() == "mark-in-progress":
+        if not splitted_input[1].isdigit():
+            print("Enter valid task ID! Enter 'list' to see list of tasks")
+        else:
+            record.updateProgress(splitted_input[1], "inProgress")
+
+    elif splitted_input[0].lower() == "mark-to-do":
+        if not splitted_input[1].isdigit():
+            print("Enter valid task ID! Enter 'list' to see list of tasks")
+        else:
+            record.updateProgress(splitted_input[1], "toDo")
+    
+    elif splitted_input[0].lower() == "mark-done":
+        if not splitted_input[1].isdigit():
+            print("Enter valid task ID! Enter 'list' to see list of tasks")
+        else:
+            record.updateProgress(splitted_input[1], "done")
 
     elif splitted_input[0].lower() == "end":
         finished = True

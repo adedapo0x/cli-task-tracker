@@ -42,14 +42,16 @@ class FileManager:
         if not os.path.exists(self.filename):
                 print("No task available in tracker!")
                 return
+        try:
+            with open(self.filename, 'r') as file:
+                file_list = file.readlines()
+        except Exception as e:
+            print(f"Problem encountered while reading tracker data, error: {e}")
 
-        with open(self.filename, 'r') as file:
-            file_list = file.readlines()
-
-            if int(inputID) < 1 or int(inputID) > len(file_list):
-                print("Task ID not in tracker!")
-                print("To view tasks and their IDs, enter 'list'")
-                return
+        if int(inputID) < 1 or int(inputID) > len(file_list):
+            print("Task ID not in tracker!")
+            print("To view tasks and their IDs, enter 'list'")
+            return
 
         task_json = file_list[int(inputID) - 1]
 
@@ -61,9 +63,11 @@ class FileManager:
         # prepare data to write back to file
         file_list[int(inputID) - 1] = json.dumps(task) + '\n'
 
-        with open(self.filename, 'w') as file:
-            file.writelines(file_list)
-
+        try:
+            with open(self.filename, 'w') as file:
+                file.writelines(file_list)
+        except Exception as e:
+            print("Problem encountered while updating tracker, err: {e}")
         print(f"Task updated successfully! (ID: {inputID})")
 
     def deleteTask(self, inputID):
@@ -71,10 +75,12 @@ class FileManager:
                 print("No task available in tracker!")
                 return
         data = []
-        with open(self.filename, 'r') as file:
-            for line in file:
-                data.append(json.loads(line.strip()))
-        
+        try:
+            with open(self.filename, 'r') as file:
+                for line in file:
+                    data.append(json.loads(line.strip()))
+        except Exception as e:
+            print(f"Problem getting tracker data, error: {e}")
 
         if int(inputID) < 1 or int(inputID) > len(data):
             print("Task ID not in tracker!")
@@ -86,12 +92,51 @@ class FileManager:
         for i, obj in enumerate(data,start=1):
             obj["id"] = i
         
-        with open(self.filename, 'w') as file:
-            for obj in data:
-                json_str = json.dumps(obj)
-                file.write(json_str + '\n')
-
+        try:
+            with open(self.filename, 'w') as file:
+                for obj in data:
+                    json_str = json.dumps(obj)
+                    file.write(json_str + '\n')
+        except Exception as e:
+            print(f"Problem encountered while updating tracker, error: {e}")
         print("Delete operation successful")
+
+    def updateProgress(self, inputID, progress):
+        if not os.path.exists(self.filename):
+            print("No task available in tracker!")
+            return
+        
+        try:
+            with open(self.filename, 'r') as file:
+                file_list = file.readlines()
+        except Exception as e:
+            print(f"Problem reading tracker, error: {e}")
+
+        if int(inputID) < 1 or int(inputID) > len(file_list):
+            print("Task ID not in tracker!")
+            print("To view tasks and their IDs, enter 'list'")
+            return
+        
+        task_json = file_list[int(inputID) - 1]
+        task = json.loads(task_json)
+
+        if task["status"] == progress:
+            print(f"Task status is already in: {progress}!")
+            return 
+
+        task["status"] = progress
+
+        file_list[int(inputID) - 1] = json.dumps(task) + "\n"
+        try:
+            with open(self.filename, 'w') as file:
+                file.writelines(file_list)
+        except Exception as e:
+            print(f"Problem updating tracker, error: {e}")
+
+        print(f"Task {inputID} status is now: {progress}!")
+
+    
+
 
 
 
