@@ -171,7 +171,31 @@ class FileManager:
             if line["status"] == progress:
                 print(f'{line["id"]} - {line["description"]} - {line["status"]} - {line["createdAt"]} - {line["updatedAt"]}')
 
+    def help(self):
+        print("- To add task to tracker, use add keyword")
+        print("add doing the laundry\n")
 
+        print("- To update task description, use update keyword, task ID and updated description")
+        print("update 1 baking the cake\n")
+
+        print("- To delete a task, use delete keyword and task ID")
+        print("delete 1\n")
+
+        print("- Marking a task as in progress, done or remarking as todo")
+        print("mark-in-progress 1")
+        print("mark-done 1")
+        print("mark-to-do 1\n")
+
+        print("- Listing all the tasks in the tracker, using the list keyword")
+        print("list\n")
+
+        print("- List task by status, using list keyword followed by status")
+        print("list done")
+        print("list todo")
+        print("list in-progress\n")
+
+        print("- Enter end keyword to stop program")
+        print("end\n")
 
 
 
